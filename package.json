@@ -1,0 +1,26 @@
+{
+  "name": "tree-sitter-nomo",
+  "version": "0.1.0",
+  "description": "Nomo grammar for tree-sitter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nomo-lang/tree-sitter-nomo.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "nomo"
+  ],
+  "files": [
+    "grammar.js",
+    "queries/*",
+    "src/**"
+  ],
+  "devDependencies": {
+    "tree-sitter-cli": "^0.24.0"
+  },
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test"
+  }
+}
