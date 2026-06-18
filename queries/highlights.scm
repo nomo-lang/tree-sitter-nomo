@@ -11,20 +11,17 @@
   "mut"
   "return"
   "defer"
-  "break"
-  "continue"
   "for"
   "in"
   "as"
-] @keyword
-
-[
   "if"
   "else"
   "match"
-] @keyword.control.conditional
+  "panic"
+] @keyword
 
-"panic" @keyword.control
+(break_statement) @keyword
+(continue_statement) @keyword
 
 ; Operators
 [
@@ -42,7 +39,7 @@
 ] @operator
 
 ; Punctuation
-[ "(" ")" "{" "}" "<" ">" ] @punctuation.bracket
+[ "(" ")" "{" "}" ] @punctuation.bracket
 [ "," ":" "." ] @punctuation.delimiter
 
 ; Types
@@ -55,25 +52,24 @@
 (escape_sequence) @string.escape
 (number_literal) @number
 (boolean_literal) @boolean
-
-; Comments
 (line_comment) @comment
 
 ; Functions
 (function_declaration name: (identifier) @function)
 (call_expression
-  function: (field_access (identifier) @function.call .))
+  function: (field_access (identifier) @function .))
 
 ; Parameters and fields
 (parameter name: (identifier) @variable.parameter)
 (field_declaration name: (identifier) @property)
 (field_initializer name: (identifier) @property)
 
-; Variants like Option.Some
-(pattern (field_access (type_identifier) @type (type_identifier) @constant))
+; Enum variant in patterns, e.g. Option.Some
+(pattern
+  (field_access (type_identifier) @type (type_identifier) @constant))
 
-; self
-"self" @variable.builtin
+; Built-in value
+"self" @variable.special
 
-; Variables
+; Variables (fallback)
 (identifier) @variable
