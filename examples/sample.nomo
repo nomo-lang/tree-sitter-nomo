@@ -1,0 +1,13 @@
+package app.main
+
+import std.io
+
+fn greeting() -> string {
+    "Hello, Nomo"
+}
+
+fn main() -> void {
+    let message: string = greeting()
+    io.println(message)
+    io.println("你好")
+}
