@@ -124,3 +124,83 @@ io.println(script_message)
         (argument
           (field_access
             (identifier)))))))
+
+==================
+Current v0.1 operators
+==================
+
+package app.main
+
+fn main() -> void {
+    let mut value: i64 = 1
+    value += 2
+    value++
+    value--
+    let ok: bool = !failed && ready || cached
+    let masked: i64 = value & mask &^ clear << 1 >> shift | extra ^ flags
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (let_statement
+        name: (identifier)
+        type: (type
+          (primitive_type))
+        value: (number_literal))
+      (assignment_statement
+        left: (field_access
+          (identifier))
+        right: (number_literal))
+      (postfix_update_statement
+        target: (field_access
+          (identifier)))
+      (postfix_update_statement
+        target: (field_access
+          (identifier)))
+      (let_statement
+        name: (identifier)
+        type: (type
+          (primitive_type))
+        value: (binary_expression
+          left: (binary_expression
+            left: (unary_expression
+              argument: (field_access
+                (identifier)))
+            right: (field_access
+              (identifier)))
+          right: (field_access
+            (identifier))))
+      (let_statement
+        name: (identifier)
+        type: (type
+          (primitive_type))
+        value: (binary_expression
+          left: (binary_expression
+            left: (binary_expression
+              left: (binary_expression
+                left: (binary_expression
+                  left: (binary_expression
+                    left: (field_access
+                      (identifier))
+                    right: (field_access
+                      (identifier)))
+                  right: (field_access
+                    (identifier)))
+                right: (number_literal))
+              right: (field_access
+                (identifier)))
+            right: (field_access
+              (identifier)))
+          right: (field_access
+            (identifier)))))))

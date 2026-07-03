@@ -137,6 +137,7 @@ module.exports = grammar({
         $.let_statement,
         $.if_let_statement,
         $.assignment_statement,
+        $.postfix_update_statement,
         $.return_statement,
         $.defer_statement,
         $.break_statement,
@@ -177,7 +178,20 @@ module.exports = grammar({
       ),
 
     assignment_statement: ($) =>
-      prec(1, seq(field("left", $.field_access), "=", field("right", $._expression))),
+      prec(
+        1,
+        seq(
+          field("left", $.field_access),
+          field(
+            "operator",
+            choice("=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "^=", "|=", "&^="),
+          ),
+          field("right", $._expression),
+        ),
+      ),
+
+    postfix_update_statement: ($) =>
+      prec(1, seq(field("target", $.field_access), field("operator", choice("++", "--")))),
 
     return_statement: ($) => prec.right(seq("return", optional($._expression))),
 
@@ -205,6 +219,7 @@ module.exports = grammar({
     _non_if_expression: ($) =>
       choice(
         $.binary_expression,
+        $.unary_expression,
         $.unary_postfix,
         $.call_expression,
         $.struct_literal,
@@ -225,10 +240,36 @@ module.exports = grammar({
       prec.left(
         seq(
           field("left", $._expression),
-          field("operator", choice("+", "*", "==", "!=", "<", "<=", ">", ">=")),
+          field(
+            "operator",
+            choice(
+              "||",
+              "&&",
+              "+",
+              "-",
+              "*",
+              "/",
+              "%",
+              "&",
+              "|",
+              "^",
+              "&^",
+              "<<",
+              ">>",
+              "==",
+              "!=",
+              "<",
+              "<=",
+              ">",
+              ">=",
+            ),
+          ),
           field("right", $._expression),
         ),
       ),
+
+    unary_expression: ($) =>
+      prec(5, seq(field("operator", "!"), field("argument", $._expression))),
 
     unary_postfix: ($) => prec(3, seq($._expression, "?")),
 
