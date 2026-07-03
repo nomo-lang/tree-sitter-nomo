@@ -7,6 +7,7 @@
   "struct"
   "enum"
   "impl"
+  "const"
   "let"
   "mut"
   "return"
@@ -28,6 +29,7 @@
   "+"
   "=="
   "!="
+  "*"
   "<"
   "<="
   ">"
@@ -59,7 +61,8 @@
 (call_expression
   function: (field_access (identifier) @function .))
 
-; Parameters and fields
+; Constants, parameters and fields
+(const_declaration name: (_) @constant)
 (parameter name: (identifier) @variable.parameter)
 (field_declaration name: (identifier) @property)
 (field_initializer name: (identifier) @property)

@@ -23,3 +23,104 @@ fn main() -> void {
     body: (block
       (expression_statement
         (string_literal)))))
+
+==================
+Current v0.1 declarations and script body
+==================
+
+package app.main
+
+const LIMIT: i32 = 3
+
+fn main() -> void {
+    let Option.Some(value) = parse()? else {
+        return
+    }
+    if let Result.Ok(output) = format(mut value) {
+        defer io.println(output)
+    }
+    for item in values()? {
+        continue
+    }
+}
+
+let script_message: string = "script"
+io.println(script_message)
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (const_declaration
+    name: (type_identifier)
+    type: (type
+      (primitive_type))
+    value: (number_literal))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (let_statement
+        pattern: (let_else_pattern
+          (field_access
+            (type_identifier)
+            (type_identifier))
+          (identifier))
+        value: (unary_postfix
+          (call_expression
+            function: (field_access
+              (identifier))
+            arguments: (arguments)))
+        alternative: (block
+          (return_statement)))
+      (if_let_statement
+        pattern: (pattern
+          (field_access
+            (type_identifier)
+            (type_identifier))
+          (identifier))
+        value: (call_expression
+          function: (field_access
+            (identifier))
+          arguments: (arguments
+            (argument
+              (field_access
+                (identifier)))))
+        consequence: (block
+          (defer_statement
+            (call_expression
+              function: (field_access
+                (identifier)
+                (identifier))
+              arguments: (arguments
+                (argument
+                  (field_access
+                    (identifier))))))))
+      (for_statement
+        (identifier)
+        (unary_postfix
+          (call_expression
+            function: (field_access
+              (identifier))
+            arguments: (arguments)))
+        (block
+          (continue_statement)))))
+  (let_statement
+    name: (identifier)
+    type: (type
+      (primitive_type))
+    value: (string_literal))
+  (expression_statement
+    (call_expression
+      function: (field_access
+        (identifier)
+        (identifier))
+      arguments: (arguments
+        (argument
+          (field_access
+            (identifier)))))))

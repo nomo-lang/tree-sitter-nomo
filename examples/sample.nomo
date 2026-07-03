@@ -2,12 +2,26 @@ package app.main
 
 import std.io
 
+const LIMIT: i32 = 3
+
 fn greeting() -> string {
-    "Hello, Nomo"
+    return "Hello, Nomo"
 }
 
 fn main() -> void {
     let message: string = greeting()
+    let Option.Some(value) = parse_message()? else {
+        return
+    }
+    if let Result.Ok(output) = format_message(value) {
+        defer io.println("cleanup")
+    }
+    for item in values()? {
+        io.println(item)
+    }
     io.println(message)
     io.println("你好")
 }
+
+let script_message: string = "script"
+io.println(script_message)

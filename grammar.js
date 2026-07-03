@@ -18,10 +18,10 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
-  conflicts: ($) => [],
+  conflicts: ($) => [[$.type_path, $.field_access]],
 
   rules: {
-    source_file: ($) => repeat($._declaration),
+    source_file: ($) => repeat(choice($._declaration, $._statement)),
 
     _declaration: ($) =>
       choice(
@@ -30,6 +30,7 @@ module.exports = grammar({
         $.struct_declaration,
         $.enum_declaration,
         $.impl_block,
+        $.const_declaration,
         $.function_declaration,
       ),
 
@@ -78,10 +79,21 @@ module.exports = grammar({
     impl_block: ($) =>
       seq(
         "impl",
-        field("type", $.type_identifier),
+        field("type", $.type_path),
         "{",
         repeat($.function_declaration),
         "}",
+      ),
+
+    const_declaration: ($) =>
+      seq(
+        optional("pub"),
+        "const",
+        field("name", choice($.identifier, $.type_identifier)),
+        ":",
+        field("type", $.type),
+        "=",
+        field("value", $._expression),
       ),
 
     function_declaration: ($) =>
@@ -108,8 +120,10 @@ module.exports = grammar({
 
     type: ($) =>
       prec.right(
-        seq(choice($.primitive_type, $.type_identifier), optional($.type_arguments)),
+        seq(choice($.primitive_type, $.type_path), optional($.type_arguments)),
       ),
+
+    type_path: ($) => sep1(choice($.identifier, $.type_identifier), "."),
 
     type_arguments: ($) => prec(2, seq("<", sep1($.type, ","), ">")),
 
@@ -121,6 +135,7 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.let_statement,
+        $.if_let_statement,
         $.assignment_statement,
         $.return_statement,
         $.defer_statement,
@@ -131,13 +146,34 @@ module.exports = grammar({
       ),
 
     let_statement: ($) =>
+      choice(
+        seq(
+          "let",
+          optional("mut"),
+          field("name", $.identifier),
+          optional(seq(":", field("type", $.type))),
+          "=",
+          field("value", $._expression),
+        ),
+        seq(
+          "let",
+          field("pattern", $.let_else_pattern),
+          "=",
+          field("value", $._non_if_expression),
+          "else",
+          field("alternative", $.block),
+        ),
+      ),
+
+    if_let_statement: ($) =>
       seq(
+        "if",
         "let",
-        optional("mut"),
-        field("name", $.identifier),
-        optional(seq(":", field("type", $.type))),
+        field("pattern", $.pattern),
         "=",
         field("value", $._expression),
+        field("consequence", $.block),
+        optional(seq("else", field("alternative", $.block))),
       ),
 
     assignment_statement: ($) =>
@@ -162,12 +198,17 @@ module.exports = grammar({
 
     _expression: ($) =>
       choice(
+        $._non_if_expression,
+        $.if_expression,
+      ),
+
+    _non_if_expression: ($) =>
+      choice(
         $.binary_expression,
         $.unary_postfix,
         $.call_expression,
         $.struct_literal,
         $.match_expression,
-        $.if_expression,
         $.panic_expression,
         $.cast_expression,
         $.field_access,
@@ -184,7 +225,7 @@ module.exports = grammar({
       prec.left(
         seq(
           field("left", $._expression),
-          field("operator", choice("+", "==", "!=", "<", "<=", ">", ">=")),
+          field("operator", choice("+", "*", "==", "!=", "<", "<=", ">", ">=")),
           field("right", $._expression),
         ),
       ),
@@ -199,13 +240,15 @@ module.exports = grammar({
         seq(field("function", $.field_access), field("arguments", $.arguments)),
       ),
 
-    arguments: ($) => seq("(", optional(sep1($._expression, ",")), ")"),
+    arguments: ($) => seq("(", optional(sep1($.argument, ",")), ")"),
+
+    argument: ($) => choice(seq("mut", $.field_access), $._expression),
 
     struct_literal: ($) =>
       prec(
         1,
         seq(
-          field("type", $.type_identifier),
+          field("type", $.type_path),
           "{",
           optional(sep1($.field_initializer, ",")),
           "}",
@@ -226,12 +269,15 @@ module.exports = grammar({
     pattern: ($) =>
       seq($.field_access, optional(seq("(", sep1($.identifier, ","), ")"))),
 
+    let_else_pattern: ($) => seq($.field_access, "(", $.identifier, ")"),
+
     if_expression: ($) =>
       seq(
         "if",
         field("condition", $._expression),
         field("consequence", $.block),
-        optional(seq("else", field("alternative", choice($.block, $.if_expression)))),
+        "else",
+        field("alternative", choice($.block, $.if_expression)),
       ),
 
     panic_expression: ($) => seq("panic", "(", $._expression, ")"),
