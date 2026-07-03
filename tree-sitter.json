@@ -1,0 +1,25 @@
+{
+  "grammars": [
+    {
+      "name": "nomo",
+      "camelcase": "Nomo",
+      "scope": "source.nomo",
+      "path": ".",
+      "file-types": [
+        "nomo"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
+      ],
+      "injection-regex": "nomo"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Nomo grammar for tree-sitter",
+    "links": {
+      "repository": "https://github.com/nomo-lang/tree-sitter-nomo.git"
+    }
+  }
+}

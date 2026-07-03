@@ -13,8 +13,10 @@
   ],
   "files": [
     "grammar.js",
+    "tree-sitter.json",
     "queries/*",
-    "src/**"
+    "src/**",
+    "test/**"
   ],
   "devDependencies": {
     "tree-sitter-cli": "^0.24.0"

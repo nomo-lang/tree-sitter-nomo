@@ -1,0 +1,25 @@
+==================
+Basic package and function
+==================
+
+package app.main
+
+fn main() -> void {
+    "ok"
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (expression_statement
+        (string_literal)))))
