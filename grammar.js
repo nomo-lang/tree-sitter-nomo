@@ -179,7 +179,7 @@ module.exports = grammar({
 
     assignment_statement: ($) =>
       prec(
-        1,
+        0,
         seq(
           field("left", $.field_access),
           field(
@@ -208,7 +208,7 @@ module.exports = grammar({
         $.block,
       ),
 
-    expression_statement: ($) => $._expression,
+    expression_statement: ($) => prec(-1, $._expression),
 
     _expression: ($) =>
       choice(
@@ -238,6 +238,7 @@ module.exports = grammar({
 
     binary_expression: ($) =>
       prec.left(
+        1,
         seq(
           field("left", $._expression),
           field(
@@ -269,7 +270,7 @@ module.exports = grammar({
       ),
 
     unary_expression: ($) =>
-      prec(5, seq(field("operator", "!"), field("argument", $._expression))),
+      prec(5, seq(field("operator", choice("!", "-")), field("argument", $._expression))),
 
     unary_postfix: ($) => prec(3, seq($._expression, "?")),
 
