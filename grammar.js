@@ -14,7 +14,7 @@
 module.exports = grammar({
   name: "nomo",
 
-  extras: ($) => [/\s/, $.line_comment],
+  extras: ($) => [/\s/, $.line_comment, $.block_comment],
 
   word: ($) => $.identifier,
 
@@ -342,6 +342,13 @@ module.exports = grammar({
     identifier: (_) => /[a-z_][A-Za-z0-9_]*/,
 
     line_comment: (_) => token(seq("//", /.*/)),
+
+    block_comment: ($) =>
+      seq(
+        "/*",
+        repeat(choice(/[^*/]+/, /\/[^*]/, /\*[^/]/, $.block_comment)),
+        "*/",
+      ),
   },
 });
 

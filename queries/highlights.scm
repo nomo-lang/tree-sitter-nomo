@@ -80,6 +80,7 @@
 (number_literal) @number
 (boolean_literal) @boolean
 (line_comment) @comment
+(block_comment) @comment
 
 ; Functions
 (function_declaration name: (identifier) @function)

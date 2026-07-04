@@ -218,5 +218,44 @@ fn main() -> void {
                 (identifier)))
             right: (field_access
               (identifier)))
-          right: (field_access
-            (identifier)))))))
+            right: (field_access
+              (identifier)))))))
+
+==================
+Comments
+==================
+
+package app.main
+
+// leading
+fn main() -> void {
+    /* outer
+       /* inner */
+       done */
+    io.println("comments ok")
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (line_comment)
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (block_comment
+        (block_comment))
+      (expression_statement
+        (call_expression
+          function: (field_access
+            (identifier)
+            (identifier))
+          arguments: (arguments
+            (argument
+              (string_literal))))))))
