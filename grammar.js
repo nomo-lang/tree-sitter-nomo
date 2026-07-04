@@ -29,7 +29,9 @@ module.exports = grammar({
         $.import_declaration,
         $.struct_declaration,
         $.enum_declaration,
+        $.interface_declaration,
         $.impl_block,
+        $.extern_block,
         $.const_declaration,
         $.function_declaration,
       ),
@@ -76,9 +78,39 @@ module.exports = grammar({
         optional(seq("(", sep1($.type, ","), ")")),
       ),
 
+    interface_declaration: ($) =>
+      seq(
+        optional("pub"),
+        "interface",
+        field("name", $.type_identifier),
+        "{",
+        repeat($.interface_method),
+        "}",
+      ),
+
+    interface_method: ($) =>
+      seq(
+        "fn",
+        field("name", $.identifier),
+        field("parameters", $.parameters),
+        optional(seq("->", field("return_type", $.type))),
+      ),
+
+    extern_block: ($) =>
+      seq("extern", field("abi", $.string_literal), "{", repeat($.extern_function), "}"),
+
+    extern_function: ($) =>
+      seq(
+        "fn",
+        field("name", $.identifier),
+        field("parameters", $.parameters),
+        optional(seq("->", field("return_type", $.type))),
+      ),
+
     impl_block: ($) =>
       seq(
         "impl",
+        optional(seq(field("interface", $.type_path), "for")),
         field("type", $.type_path),
         "{",
         repeat($.function_declaration),
@@ -140,6 +172,7 @@ module.exports = grammar({
         $.postfix_update_statement,
         $.return_statement,
         $.defer_statement,
+        $.unsafe_statement,
         $.break_statement,
         $.continue_statement,
         $.for_statement,
@@ -196,6 +229,8 @@ module.exports = grammar({
     return_statement: ($) => prec.right(seq("return", optional($._expression))),
 
     defer_statement: ($) => prec.right(seq("defer", $._expression)),
+
+    unsafe_statement: ($) => seq("unsafe", $.block),
 
     break_statement: (_) => "break",
 

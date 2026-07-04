@@ -126,6 +126,90 @@ io.println(script_message)
             (identifier)))))))
 
 ==================
+Interface and FFI declarations
+==================
+
+package app.main
+
+pub interface Display {
+    fn to_string(self) -> string
+}
+
+extern "C" {
+    fn puts(message: string) -> i32
+}
+
+impl Display for User {
+    fn to_string(self) -> string {
+        return self.name
+    }
+}
+
+fn main() -> void {
+    unsafe {
+        puts("hello")
+    }
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (interface_declaration
+    name: (type_identifier)
+    (interface_method
+      name: (identifier)
+      parameters: (parameters
+        (parameter))
+      return_type: (type
+        (primitive_type))))
+  (extern_block
+    abi: (string_literal)
+    (extern_function
+      name: (identifier)
+      parameters: (parameters
+        (parameter
+          name: (identifier)
+          type: (type
+            (primitive_type))))
+      return_type: (type
+        (primitive_type))))
+  (impl_block
+    interface: (type_path
+      (type_identifier))
+    type: (type_path
+      (type_identifier))
+    (function_declaration
+      name: (identifier)
+      parameters: (parameters
+        (parameter))
+      return_type: (type
+        (primitive_type))
+      body: (block
+        (return_statement
+          (field_access
+            (identifier)
+            (identifier))))))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (unsafe_statement
+        (block
+          (expression_statement
+            (call_expression
+              function: (field_access
+                (identifier))
+              arguments: (arguments
+                (argument
+                  (string_literal))))))))))
+
+==================
 Current v0.1 operators
 ==================
 
