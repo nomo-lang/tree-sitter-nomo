@@ -130,6 +130,7 @@ module.exports = grammar({
 
     function_declaration: ($) =>
       seq(
+        repeat($.attribute),
         optional("pub"),
         "fn",
         field("name", $.identifier),
@@ -138,6 +139,8 @@ module.exports = grammar({
         optional(seq("->", field("return_type", $.type))),
         field("body", $.block),
       ),
+
+    attribute: ($) => seq("#", "[", field("name", $.identifier), "]"),
 
     type_parameters: ($) => seq("<", sep1($.type_identifier, ","), ">"),
 

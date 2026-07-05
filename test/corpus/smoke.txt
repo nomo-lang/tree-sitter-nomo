@@ -1,4 +1,33 @@
 ==================
+Test attribute function
+==================
+
+package app.main
+
+#[test]
+fn main() -> void {
+    "ok"
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (function_declaration
+    (attribute
+      name: (identifier))
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (expression_statement
+        (string_literal)))))
+
+==================
 Basic package and function
 ==================
 

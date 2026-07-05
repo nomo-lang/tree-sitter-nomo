@@ -27,6 +27,8 @@
 (break_statement) @keyword
 (continue_statement) @keyword
 
+(attribute name: (identifier) @attribute)
+
 ; Operators
 [
   "+"
@@ -69,7 +71,8 @@
 ] @operator
 
 ; Punctuation
-[ "(" ")" "{" "}" ] @punctuation.bracket
+[ "(" ")" "{" "}" "[" "]" ] @punctuation.bracket
+[ "#" ] @punctuation.special
 [ "," ":" "." ] @punctuation.delimiter
 
 ; Types
