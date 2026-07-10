@@ -23,3 +23,13 @@ without running the tree-sitter CLI.
 ## Highlight queries
 
 `queries/highlights.scm` contains the highlight captures.
+
+## Distribution
+
+The release workflow validates a `v<version>` tag against `package.json`,
+regenerates and tests the parser, and produces a `tree-sitter-nomo-<version>.tgz`
+artifact. With the `NPM_TOKEN` repository secret configured, the same tag
+publishes the package to npm with provenance; without the secret, the GitHub
+release remains available and npm publication is skipped. Zed consumes a pinned
+Git commit directly, so generated parser sources remain committed even when npm
+is not used.

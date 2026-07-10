@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Nomo grammar for tree-sitter",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nomo-lang/tree-sitter-nomo.git"
@@ -23,6 +26,7 @@
   },
   "scripts": {
     "generate": "tree-sitter generate",
-    "test": "tree-sitter test"
+    "test": "tree-sitter test",
+    "pack": "npm pack"
   }
 }
