@@ -80,7 +80,14 @@ jobs:
 
       - name: Publish npm package
         if: env.NODE_AUTH_TOKEN != ''
-        run: npm publish --access public --provenance
+        shell: bash
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [[ "$version" == 0.0.0-* ]]; then
+            npm publish --access public --provenance --tag snapshot
+          else
+            npm publish --access public --provenance
+          fi
 
       - name: Skip npm publication without credentials
         if: env.NODE_AUTH_TOKEN == ''
@@ -109,12 +116,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
+          prerelease_args=()
+          if [[ "$GITHUB_REF_NAME" == v0.0.0-* ]]; then
+            prerelease_args+=(--prerelease)
+          fi
           if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" release/* --clobber --repo "$GITHUB_REPOSITORY"
           else
             gh release create "$GITHUB_REF_NAME" release/* \
               --generate-notes \
               --verify-tag \
+              "${prerelease_args[@]}" \
               --title "Tree-sitter Nomo $GITHUB_REF_NAME" \
               --repo "$GITHUB_REPOSITORY"
           fi
