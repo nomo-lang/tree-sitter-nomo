@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-nomo",
-  "version": "0.0.0-20260713145859",
+  "version": "0.0.0-20260720080715",
   "description": "Nomo grammar for tree-sitter",
   "license": "MIT",
   "publishConfig": {
