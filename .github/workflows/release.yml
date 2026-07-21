@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -39,8 +39,11 @@ jobs:
       - name: Check generated parser
         run: git diff --exit-code -- src tree-sitter.json
 
-      - name: Test grammar
+      - name: Test grammar and Node binding
         run: npm test
+
+      - name: Test packed npm module
+        run: npm run test:package
 
       - name: Pack npm artifact
         run: |
@@ -71,7 +74,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version: 22
           registry-url: https://registry.npmjs.org
           cache: npm
 
