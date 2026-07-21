@@ -1,5 +1,5 @@
 {
-  "name": "tree-sitter-nomo",
+  "name": "@nomo-lang/tree-sitter-nomo",
   "version": "0.0.0-20260721120555",
   "description": "Nomo grammar for tree-sitter",
   "license": "MIT",
@@ -8,25 +8,53 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nomo-lang/tree-sitter-nomo.git"
+    "url": "git+https://github.com/nomo-lang/tree-sitter-nomo.git"
   },
+  "main": "bindings/node",
+  "types": "bindings/node",
   "keywords": [
+    "incremental",
+    "parsing",
     "tree-sitter",
     "nomo"
   ],
   "files": [
     "grammar.js",
     "tree-sitter.json",
+    "binding.gyp",
+    "bindings/node/*",
     "queries/*",
     "src/**",
+    "*.wasm",
     "test/**"
   ],
+  "dependencies": {
+    "node-addon-api": "^8.3.1",
+    "node-gyp-build": "^4.8.4"
+  },
   "devDependencies": {
+    "tree-sitter": "^0.25.0",
     "tree-sitter-cli": "^0.24.0"
   },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
   "scripts": {
+    "install": "node-gyp-build",
     "generate": "tree-sitter generate",
-    "test": "tree-sitter test",
+    "test": "npm run test:grammar && npm run test:node",
+    "test:grammar": "tree-sitter test",
+    "test:node": "node --test bindings/node/*_test.js",
+    "test:package": "node scripts/test-package.mjs",
     "pack": "npm pack"
+  },
+  "allowScripts": {
+    "tree-sitter@0.25.0": true,
+    "tree-sitter-cli@0.24.7": true
   }
 }
