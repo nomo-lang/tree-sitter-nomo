@@ -12,12 +12,12 @@ server.
 ## Installation
 
 ```bash
-npm install tree-sitter @nomo-lang/tree-sitter-nomo
+npm install tree-sitter tree-sitter-nomo
 ```
 
 ```js
 const Parser = require("tree-sitter");
-const Nomo = require("@nomo-lang/tree-sitter-nomo");
+const Nomo = require("tree-sitter-nomo");
 
 const parser = new Parser();
 parser.setLanguage(Nomo);
@@ -43,10 +43,10 @@ without running the tree-sitter CLI.
 
 The release workflow validates a `v<version>` tag against `package.json`,
 regenerates and tests the parser, verifies a clean installation of the packed
-module, and produces a `nomo-lang-tree-sitter-nomo-<version>.tgz` artifact with a
+module, and produces a `tree-sitter-nomo-<version>.tgz` artifact with a
 SHA-256 checksum and GitHub artifact attestation. GitHub Release is the default
 distribution channel. npm publication to
-[`@nomo-lang/tree-sitter-nomo`](https://www.npmjs.com/package/@nomo-lang/tree-sitter-nomo)
+[`tree-sitter-nomo`](https://www.npmjs.com/package/tree-sitter-nomo)
 uses [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) with
 GitHub Actions OIDC, so no long-lived npm token is stored in GitHub. Configure
 the package's trusted publisher for GitHub organization `nomo-lang`, repository

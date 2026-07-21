@@ -1,5 +1,5 @@
 {
-  "name": "@nomo-lang/tree-sitter-nomo",
+  "name": "tree-sitter-nomo",
   "version": "0.0.0-20260721120555",
   "description": "Nomo grammar for tree-sitter",
   "license": "MIT",

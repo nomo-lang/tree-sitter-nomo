@@ -43,7 +43,7 @@ try {
     packageRoot,
   );
   const [packed] = JSON.parse(packOutput);
-  assert.equal(packed.name, "@nomo-lang/tree-sitter-nomo");
+  assert.equal(packed.name, "tree-sitter-nomo");
 
   const consumer = join(temporaryRoot, "consumer");
   await mkdir(consumer);
@@ -65,7 +65,7 @@ try {
       [
         'const assert = require("node:assert/strict");',
         'const Parser = require("tree-sitter");',
-        'const Nomo = require("@nomo-lang/tree-sitter-nomo");',
+        'const Nomo = require("tree-sitter-nomo");',
         'assert.equal(Nomo.name, "nomo");',
         "const parser = new Parser();",
         "parser.setLanguage(Nomo);",
