@@ -55,7 +55,7 @@ jobs:
           if-no-files-found: error
 
   publish-npm:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') && vars.PUBLISH_NPM == 'true'
     needs: package
     runs-on: ubuntu-latest
     permissions:
@@ -99,6 +99,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
 
     steps:
       - name: Download package
@@ -110,6 +113,11 @@ jobs:
       - name: Generate checksum
         working-directory: release
         run: sha256sum *.tgz > SHA256SUMS
+
+      - name: Attest release artifact
+        uses: actions/attest@v4
+        with:
+          subject-path: release/*.tgz
 
       - name: Create or update GitHub release
         env:
