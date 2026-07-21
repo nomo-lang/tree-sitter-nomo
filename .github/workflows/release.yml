@@ -64,8 +64,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
       - name: Checkout
@@ -76,25 +74,23 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
-          cache: npm
+          package-manager-cache: false
+
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.16.0
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Publish npm package
-        if: env.NODE_AUTH_TOKEN != ''
+      - name: Publish npm package with OIDC
         shell: bash
         run: |
           version=$(node -p "require('./package.json').version")
           if [[ "$version" == 0.0.0-* ]]; then
-            npm publish --access public --provenance --tag snapshot
+            npm publish --access public --tag snapshot
           else
-            npm publish --access public --provenance
+            npm publish --access public
           fi
-
-      - name: Skip npm publication without credentials
-        if: env.NODE_AUTH_TOKEN == ''
-        run: echo "NPM_TOKEN is not configured; package artifact remains available from the GitHub release."
 
   github-release:
     if: startsWith(github.ref, 'refs/tags/v')
