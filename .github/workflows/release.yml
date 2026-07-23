@@ -98,9 +98,9 @@ jobs:
         run: |
           version=$(node -p "require('./package.json').version")
           if [[ "$version" == 0.0.0-* ]]; then
-            npm publish release/*.tgz --access public --tag snapshot
+            npm publish ./release/*.tgz --access public --tag snapshot
           else
-            npm publish release/*.tgz --access public
+            npm publish ./release/*.tgz --access public
           fi
 
   github-release:
