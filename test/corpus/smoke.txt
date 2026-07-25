@@ -331,8 +331,8 @@ fn main() -> void {
                 (identifier)))
             right: (field_access
               (identifier)))
-            right: (field_access
-              (identifier)))))))
+          right: (field_access
+            (identifier)))))))
 
 ==================
 Comments
@@ -372,3 +372,71 @@ fn main() -> void {
           arguments: (arguments
             (argument
               (string_literal))))))))
+
+==================
+Array literals and nested indexing
+==================
+
+package app.main
+
+fn main() -> void {
+    let values = [1, 2, 3]
+    let mut matrix = [[1, 2], [3, 4]]
+    let value = matrix[0][1]
+    matrix[0][1] = 7
+    let empty: Array<i32> = []
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (let_statement
+        name: (identifier)
+        value: (array_literal
+          (number_literal)
+          (number_literal)
+          (number_literal)))
+      (let_statement
+        name: (identifier)
+        value: (array_literal
+          (array_literal
+            (number_literal)
+            (number_literal))
+          (array_literal
+            (number_literal)
+            (number_literal))))
+      (let_statement
+        name: (identifier)
+        value: (index_expression
+          value: (index_expression
+            value: (field_access
+              (identifier))
+            index: (number_literal))
+          index: (number_literal)))
+      (assignment_statement
+        left: (index_expression
+          value: (index_expression
+            value: (field_access
+              (identifier))
+            index: (number_literal))
+          index: (number_literal))
+        right: (number_literal))
+      (let_statement
+        name: (identifier)
+        type: (type
+          (type_path
+            (type_identifier))
+          (type_arguments
+            (type
+              (primitive_type))))
+        value: (array_literal)))))

@@ -217,7 +217,7 @@ module.exports = grammar({
       prec(
         0,
         seq(
-          field("left", $.field_access),
+          field("left", choice($.field_access, $.index_expression)),
           field(
             "operator",
             choice("=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", "&=", "^=", "|=", "&^="),
@@ -260,6 +260,8 @@ module.exports = grammar({
         $.unary_expression,
         $.unary_postfix,
         $.call_expression,
+        $.array_literal,
+        $.index_expression,
         $.struct_literal,
         $.match_expression,
         $.panic_expression,
@@ -323,6 +325,33 @@ module.exports = grammar({
     arguments: ($) => seq("(", optional(sep1($.argument, ",")), ")"),
 
     argument: ($) => choice(seq("mut", $.field_access), $._expression),
+
+    array_literal: ($) =>
+      seq(
+        "[",
+        optional(seq($._expression, repeat(seq(",", $._expression)), optional(","))),
+        "]",
+      ),
+
+    index_expression: ($) =>
+      prec.left(
+        5,
+        seq(
+          field(
+            "value",
+            choice(
+              $.field_access,
+              $.call_expression,
+              $.parenthesized_expression,
+              $.array_literal,
+              $.index_expression,
+            ),
+          ),
+          "[",
+          field("index", $._expression),
+          "]",
+        ),
+      ),
 
     struct_literal: ($) =>
       prec(
