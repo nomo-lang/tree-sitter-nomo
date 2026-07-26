@@ -621,6 +621,18 @@
           "named": true
         },
         {
+          "type": "task_deadline_statement",
+          "named": true
+        },
+        {
+          "type": "task_scope_statement",
+          "named": true
+        },
+        {
+          "type": "task_select_statement",
+          "named": true
+        },
+        {
           "type": "unsafe_statement",
           "named": true
         }
@@ -2675,6 +2687,18 @@
           "named": true
         },
         {
+          "type": "task_deadline_statement",
+          "named": true
+        },
+        {
+          "type": "task_scope_statement",
+          "named": true
+        },
+        {
+          "type": "task_select_statement",
+          "named": true
+        },
+        {
           "type": "unsafe_statement",
           "named": true
         }
@@ -2768,6 +2792,194 @@
       "types": [
         {
           "type": "field_initializer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "task_deadline_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "duration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "field_access",
+            "named": true
+          },
+          {
+            "type": "if_expression",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "number_literal",
+            "named": true
+          },
+          {
+            "type": "panic_expression",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "unary_postfix",
+            "named": true
+          }
+        ]
+      },
+      "namespace": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "task_scope_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "namespace": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "task_select_arm",
+    "named": true,
+    "fields": {
+      "binding": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "operation": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "task_select_statement",
+    "named": true,
+    "fields": {
+      "namespace": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "task_select_arm",
           "named": true
         }
       ]
@@ -3242,6 +3454,10 @@
     "named": true
   },
   {
+    "type": "deadline",
+    "named": false
+  },
+  {
     "type": "defer",
     "named": false
   },
@@ -3346,6 +3562,14 @@
     "named": false
   },
   {
+    "type": "scope",
+    "named": false
+  },
+  {
+    "type": "select",
+    "named": false
+  },
+  {
     "type": "self",
     "named": false
   },
@@ -3355,6 +3579,10 @@
   },
   {
     "type": "struct",
+    "named": false
+  },
+  {
+    "type": "suspend",
     "named": false
   },
   {

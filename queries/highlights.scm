@@ -3,6 +3,7 @@
   "package"
   "import"
   "pub"
+  "suspend"
   "fn"
   "struct"
   "enum"
@@ -26,6 +27,15 @@
 
 (break_statement) @keyword
 (continue_statement) @keyword
+(task_scope_statement
+  namespace: (identifier) @keyword
+  "scope" @keyword)
+(task_deadline_statement
+  namespace: (identifier) @keyword
+  "deadline" @keyword)
+(task_select_statement
+  namespace: (identifier) @keyword
+  "select" @keyword)
 
 (attribute name: (identifier) @attribute)
 
