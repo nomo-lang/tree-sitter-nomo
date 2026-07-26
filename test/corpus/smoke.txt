@@ -440,3 +440,126 @@ fn main() -> void {
             (type
               (primitive_type))))
         value: (array_literal)))))
+
+==================
+Structured async task syntax
+==================
+
+package app.main
+
+import std.task
+import std.time
+
+interface Runner {
+    suspend fn run(self) -> void
+}
+
+pub suspend fn main() -> void {
+    task.scope {
+        task.deadline(time.duration_millis(5)) {
+            task.yield_now()
+        }
+        task.select {
+            task.receive(messages) => message {
+                consume(message)
+            }
+            task.sleep(time.duration_millis(50)) => timeout {
+                consume(timeout)
+            }
+        }
+    }
+}
+
+---
+
+(source_file
+  (package_declaration
+    name: (dotted_path
+      (identifier)
+      (identifier)))
+  (import_declaration
+    path: (dotted_path
+      (identifier)
+      (identifier)))
+  (import_declaration
+    path: (dotted_path
+      (identifier)
+      (identifier)))
+  (interface_declaration
+    name: (type_identifier)
+    (interface_method
+      name: (identifier)
+      parameters: (parameters
+        (parameter))
+      return_type: (type
+        (primitive_type))))
+  (function_declaration
+    name: (identifier)
+    parameters: (parameters)
+    return_type: (type
+      (primitive_type))
+    body: (block
+      (task_scope_statement
+        namespace: (identifier)
+        body: (block
+          (task_deadline_statement
+            namespace: (identifier)
+            duration: (call_expression
+              function: (field_access
+                (identifier)
+                (identifier))
+              arguments: (arguments
+                (argument
+                  (number_literal))))
+            body: (block
+              (expression_statement
+                (call_expression
+                  function: (field_access
+                    (identifier)
+                    (identifier))
+                  arguments: (arguments)))))
+          (task_select_statement
+            namespace: (identifier)
+            (task_select_arm
+              operation: (call_expression
+                function: (field_access
+                  (identifier)
+                  (identifier))
+                arguments: (arguments
+                  (argument
+                    (field_access
+                      (identifier)))))
+              binding: (identifier)
+              body: (block
+                (expression_statement
+                  (call_expression
+                    function: (field_access
+                      (identifier))
+                    arguments: (arguments
+                      (argument
+                        (field_access
+                          (identifier))))))))
+            (task_select_arm
+              operation: (call_expression
+                function: (field_access
+                  (identifier)
+                  (identifier))
+                arguments: (arguments
+                  (argument
+                    (call_expression
+                      function: (field_access
+                        (identifier)
+                        (identifier))
+                      arguments: (arguments
+                        (argument
+                          (number_literal)))))))
+              binding: (identifier)
+              body: (block
+                (expression_statement
+                  (call_expression
+                    function: (field_access
+                      (identifier))
+                    arguments: (arguments
+                      (argument
+                        (field_access
+                          (identifier))))))))))))))

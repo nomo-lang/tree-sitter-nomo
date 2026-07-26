@@ -90,6 +90,7 @@ module.exports = grammar({
 
     interface_method: ($) =>
       seq(
+        optional("suspend"),
         "fn",
         field("name", $.identifier),
         field("parameters", $.parameters),
@@ -132,6 +133,7 @@ module.exports = grammar({
       seq(
         repeat($.attribute),
         optional("pub"),
+        optional("suspend"),
         "fn",
         field("name", $.identifier),
         optional($.type_parameters),
@@ -179,6 +181,9 @@ module.exports = grammar({
         $.break_statement,
         $.continue_statement,
         $.for_statement,
+        $.task_scope_statement,
+        $.task_deadline_statement,
+        $.task_select_statement,
         $.expression_statement,
       ),
 
@@ -244,6 +249,43 @@ module.exports = grammar({
         "for",
         optional(choice(seq($.identifier, "in", $._expression), $._expression)),
         $.block,
+      ),
+
+    task_scope_statement: ($) =>
+      seq(
+        field("namespace", $.identifier),
+        ".",
+        "scope",
+        field("body", $.block),
+      ),
+
+    task_deadline_statement: ($) =>
+      seq(
+        field("namespace", $.identifier),
+        ".",
+        "deadline",
+        "(",
+        field("duration", $._expression),
+        ")",
+        field("body", $.block),
+      ),
+
+    task_select_statement: ($) =>
+      seq(
+        field("namespace", $.identifier),
+        ".",
+        "select",
+        "{",
+        repeat1($.task_select_arm),
+        "}",
+      ),
+
+    task_select_arm: ($) =>
+      seq(
+        field("operation", $.call_expression),
+        "=>",
+        field("binding", $.identifier),
+        field("body", $.block),
       ),
 
     expression_statement: ($) => prec(-1, $._expression),
