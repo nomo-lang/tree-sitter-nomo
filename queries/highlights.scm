@@ -4,6 +4,7 @@
   "import"
   "pub"
   "suspend"
+  "task"
   "fn"
   "struct"
   "enum"
