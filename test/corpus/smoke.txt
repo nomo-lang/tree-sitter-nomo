@@ -1,8 +1,8 @@
 ==================
-Test attribute function
+Explicit void compatibility on an attributed function
 ==================
 
-package app.main
+package sample
 
 #[test]
 fn main() -> void {
@@ -14,7 +14,6 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (function_declaration
     (attribute
@@ -31,9 +30,9 @@ fn main() -> void {
 Basic package and function
 ==================
 
-package app.main
+package sample
 
-fn main() -> void {
+fn main() {
     "ok"
 }
 
@@ -42,13 +41,10 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (expression_statement
         (string_literal)))))
@@ -57,11 +53,11 @@ fn main() -> void {
 Current v0.1 declarations and script body
 ==================
 
-package app.main
+package sample
 
 const LIMIT: i32 = 3
 
-fn main() -> void {
+fn main() {
     let Option.Some(value) = parse()? else {
         return
     }
@@ -81,7 +77,6 @@ io.println(script_message)
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (const_declaration
     name: (type_identifier)
@@ -91,8 +86,6 @@ io.println(script_message)
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (let_statement
         pattern: (let_else_pattern
@@ -158,7 +151,7 @@ io.println(script_message)
 Interface and FFI declarations
 ==================
 
-package app.main
+package sample
 
 pub interface Display {
     fn to_string(self) -> string
@@ -174,7 +167,7 @@ impl Display for User {
     }
 }
 
-fn main() -> void {
+fn main() {
     unsafe {
         puts("hello")
     }
@@ -185,7 +178,6 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (interface_declaration
     name: (type_identifier)
@@ -225,8 +217,6 @@ fn main() -> void {
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (unsafe_statement
         (block
@@ -242,9 +232,9 @@ fn main() -> void {
 Current v0.1 operators
 ==================
 
-package app.main
+package sample
 
-fn main() -> void {
+fn main() {
     let mut value: i64 = 1
     value += 2
     value++
@@ -259,13 +249,10 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (let_statement
         name: (identifier)
@@ -338,10 +325,10 @@ fn main() -> void {
 Comments
 ==================
 
-package app.main
+package sample
 
 // leading
-fn main() -> void {
+fn main() {
     /* outer
        /* inner */
        done */
@@ -353,14 +340,11 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (line_comment)
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (block_comment
         (block_comment))
@@ -377,9 +361,9 @@ fn main() -> void {
 Array literals and nested indexing
 ==================
 
-package app.main
+package sample
 
-fn main() -> void {
+fn main() {
     let values = [1, 2, 3]
     let mut matrix = [[1, 2], [3, 4]]
     let value = matrix[0][1]
@@ -392,13 +376,10 @@ fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (let_statement
         name: (identifier)
@@ -445,16 +426,16 @@ fn main() -> void {
 Structured async task syntax
 ==================
 
-package app.main
+package sample
 
 import std.task
 import std.time
 
 interface Runner {
-    suspend fn run(self) -> void
+    suspend fn run(self)
 }
 
-pub suspend fn main() -> void {
+pub suspend fn main() {
     task.scope {
         task.deadline(time.duration_millis(5)) {
             task.yield_now()
@@ -475,7 +456,6 @@ pub suspend fn main() -> void {
 (source_file
   (package_declaration
     name: (dotted_path
-      (identifier)
       (identifier)))
   (import_declaration
     path: (dotted_path
@@ -490,14 +470,10 @@ pub suspend fn main() -> void {
     (interface_method
       name: (identifier)
       parameters: (parameters
-        (parameter))
-      return_type: (type
-        (primitive_type))))
+        (parameter))))
   (function_declaration
     name: (identifier)
     parameters: (parameters)
-    return_type: (type
-      (primitive_type))
     body: (block
       (task_scope_statement
         namespace: (identifier)
@@ -563,3 +539,118 @@ pub suspend fn main() -> void {
                       (argument
                         (field_access
                           (identifier))))))))))))))
+
+==================
+Implicit void declarations and callable return types
+==================
+
+package syntax
+
+interface Sink {
+    fn close(self)
+    suspend fn flush(self)
+}
+
+extern "C" {
+    fn release(handle: i64)
+}
+
+struct Handle {
+    value: i64
+}
+
+impl Sink for Handle {
+    fn close(self) {
+    }
+
+    suspend fn flush(self) {
+    }
+}
+
+fn register(callback: task fn(string) -> void) -> Result<void, string> {
+    callback("ok")
+    return Ok(void)
+}
+
+---
+
+(source_file
+  (package_declaration
+    (dotted_path
+      (identifier)))
+  (interface_declaration
+    (type_identifier)
+    (interface_method
+      (identifier)
+      (parameters
+        (parameter)))
+    (interface_method
+      (identifier)
+      (parameters
+        (parameter))))
+  (extern_block
+    (string_literal)
+    (extern_function
+      (identifier)
+      (parameters
+        (parameter
+          (identifier)
+          (type
+            (primitive_type))))))
+  (struct_declaration
+    (type_identifier)
+    (struct_body
+      (field_declaration
+        (identifier)
+        (type
+          (primitive_type)))))
+  (impl_block
+    (type_path
+      (type_identifier))
+    (type_path
+      (type_identifier))
+    (function_declaration
+      (identifier)
+      (parameters
+        (parameter))
+      (block))
+    (function_declaration
+      (identifier)
+      (parameters
+        (parameter))
+      (block)))
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type
+          (callable_type
+            (type
+              (primitive_type))
+            (type
+              (primitive_type))))))
+    (type
+      (type_path
+        (type_identifier))
+      (type_arguments
+        (type
+          (primitive_type))
+        (type
+          (primitive_type))))
+    (block
+      (expression_statement
+        (call_expression
+          (field_access
+            (identifier))
+          (arguments
+            (argument
+              (string_literal)))))
+      (return_statement
+        (call_expression
+          (field_access
+            (type_identifier))
+          (arguments
+            (argument
+              (field_access
+                (identifier)))))))))
