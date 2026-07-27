@@ -21,7 +21,7 @@ test("parses structured async task syntax without errors", () => {
   parser.setLanguage(Nomo);
 
   const tree = parser.parse(`
-    suspend fn main() -> void {
+    suspend fn main() {
       task.scope {
         task.deadline(time.duration_millis(5)) {
           task.yield_now()

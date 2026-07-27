@@ -156,8 +156,24 @@ module.exports = grammar({
       ),
 
     type: ($) =>
+      choice(
+        $.callable_type,
+        prec.right(
+          seq(choice($.primitive_type, $.type_path), optional($.type_arguments)),
+        ),
+      ),
+
+    callable_type: ($) =>
       prec.right(
-        seq(choice($.primitive_type, $.type_path), optional($.type_arguments)),
+        seq(
+          "task",
+          "fn",
+          "(",
+          optional(sep1($.type, ",")),
+          ")",
+          "->",
+          field("return_type", $.type),
+        ),
       ),
 
     type_path: ($) => sep1(choice($.identifier, $.type_identifier), "."),

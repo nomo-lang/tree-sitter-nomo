@@ -686,6 +686,32 @@
     }
   },
   {
+    "type": "callable_type",
+    "named": true,
+    "fields": {
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "cast_expression",
     "named": true,
     "fields": {
@@ -2994,6 +3020,10 @@
       "required": true,
       "types": [
         {
+          "type": "callable_type",
+          "named": true
+        },
+        {
           "type": "primitive_type",
           "named": true
         },
@@ -3583,6 +3613,10 @@
   },
   {
     "type": "suspend",
+    "named": false
+  },
+  {
+    "type": "task",
     "named": false
   },
   {
